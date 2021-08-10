@@ -1,0 +1,48 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/timvosch/src/t814-m1284p-twi/include",
+                "/home/timvosch/src/t814-m1284p-twi/src",
+                "/home/timvosch/src/t814-m1284p-twi/lib/events/include",
+                "/home/timvosch/src/t814-m1284p-twi/lib/events/src",
+                "/home/timvosch/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/timvosch/src/t814-m1284p-twi/include",
+                    "/home/timvosch/src/t814-m1284p-twi/src",
+                    "/home/timvosch/src/t814-m1284p-twi/lib/events/include",
+                    "/home/timvosch/src/t814-m1284p-twi/lib/events/src",
+                    "/home/timvosch/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "F_CPU=16000000L",
+                "PLATFORMIO=50101",
+                "ARDUINO_attinyxy4",
+                "MILLIS_USE_TIMERD0",
+                "UARTBAUD5V",
+                "BOARD_MODULE",
+                ""
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "/home/timvosch/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=attiny814",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
