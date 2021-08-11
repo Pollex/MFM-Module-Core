@@ -8,20 +8,20 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "/home/timvosch/src/t814-m1284p-twi/include",
-                "/home/timvosch/src/t814-m1284p-twi/src",
-                "/home/timvosch/src/t814-m1284p-twi/lib/events/include",
-                "/home/timvosch/src/t814-m1284p-twi/lib/events/src",
+                "/home/timvosch/src/mfm-module-core/include",
+                "/home/timvosch/src/mfm-module-core/src",
+                "/home/timvosch/src/mfm-module-core/lib/events/include",
+                "/home/timvosch/src/mfm-module-core/lib/events/src",
                 "/home/timvosch/.platformio/packages/tool-unity",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "/home/timvosch/src/t814-m1284p-twi/include",
-                    "/home/timvosch/src/t814-m1284p-twi/src",
-                    "/home/timvosch/src/t814-m1284p-twi/lib/events/include",
-                    "/home/timvosch/src/t814-m1284p-twi/lib/events/src",
+                    "/home/timvosch/src/mfm-module-core/include",
+                    "/home/timvosch/src/mfm-module-core/src",
+                    "/home/timvosch/src/mfm-module-core/lib/events/include",
+                    "/home/timvosch/src/mfm-module-core/lib/events/src",
                     "/home/timvosch/.platformio/packages/tool-unity",
                     ""
                 ]

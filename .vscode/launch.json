@@ -12,7 +12,7 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "/home/timvosch/src/t814-m1284p-twi/.pio/build/ATtiny814/firmware.elf",
+            "executable": "/home/timvosch/src/mfm-module-core/.pio/build/ATtiny814/firmware.elf",
             "projectEnvName": "ATtiny814",
             "toolchainBinDir": "/home/timvosch/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart",
@@ -25,7 +25,7 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "/home/timvosch/src/t814-m1284p-twi/.pio/build/ATtiny814/firmware.elf",
+            "executable": "/home/timvosch/src/mfm-module-core/.pio/build/ATtiny814/firmware.elf",
             "projectEnvName": "ATtiny814",
             "toolchainBinDir": "/home/timvosch/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart"
