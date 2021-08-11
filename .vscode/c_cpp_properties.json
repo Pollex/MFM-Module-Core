@@ -12,6 +12,7 @@
                 "/home/timvosch/src/mfm-module-core/src",
                 "/home/timvosch/src/mfm-module-core/lib/events/include",
                 "/home/timvosch/src/mfm-module-core/lib/events/src",
+                "/home/timvosch/src/mfm-module-core/include/global",
                 "/home/timvosch/.platformio/packages/tool-unity",
                 ""
             ],
@@ -22,6 +23,7 @@
                     "/home/timvosch/src/mfm-module-core/src",
                     "/home/timvosch/src/mfm-module-core/lib/events/include",
                     "/home/timvosch/src/mfm-module-core/lib/events/src",
+                    "/home/timvosch/src/mfm-module-core/include/global",
                     "/home/timvosch/.platformio/packages/tool-unity",
                     ""
                 ]
@@ -32,7 +34,6 @@
                 "ARDUINO_attinyxy4",
                 "MILLIS_USE_TIMERD0",
                 "UARTBAUD5V",
-                "BOARD_MODULE",
                 ""
             ],
             "cStandard": "c11",

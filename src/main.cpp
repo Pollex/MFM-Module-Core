@@ -1,15 +1,16 @@
-#ifdef BOARD_MODULE
+#include "main.h"
 
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
-#include "main.h"
+#include "ev_events.h"
 #include "events.h"
+#include "twi.h"
 
 int main(void)
 {
   sei();
-  init_twi();
+  twi_init();
 
   PORTA.DIRSET = PIN6_bm;
   PORTA.OUTCLR = PIN6_bm;
@@ -25,12 +26,6 @@ int main(void)
       // Process current event
       switch (current_event->id)
       {
-      case EV_TWI_TRAN_START:
-        break;
-      case EV_TWI_TRAN_END:
-        if (twi_available() == 2)
-          PORTA.OUTTGL = PIN6_bm;
-        break;
       }
     }
 
@@ -49,5 +44,3 @@ int main(void)
     sleep_disable();
   }
 }
-
-#endif

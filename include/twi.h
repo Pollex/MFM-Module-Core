@@ -2,11 +2,7 @@
 #define _TWI_H_
 
 #include <stdint.h>
-
-typedef struct
-{
-
-} twi_t;
+#include "ev_events.h"
 
 #ifdef __cplusplus
 extern "C"

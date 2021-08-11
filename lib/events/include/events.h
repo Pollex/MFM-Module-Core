@@ -2,6 +2,7 @@
 #define _EVENTS_H_
 
 #include <stdint.h>
+#include "ev_events.h"
 
 #ifndef EV_QUEUE_SIZE
 #define EV_QUEUE_SIZE 32
