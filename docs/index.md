@@ -38,7 +38,7 @@ The PEC byte can occur in two occasions:
 - **Master write, to read**  
   When reading, the driver knows the response length. If the master sends more clock cycles, the driver can provide the PEC. However, according to the specification (6.4.1.2.) the master should know whether the slave supports PEC.
 
-#### Command sequence (no PEC)
+### Command sequence (no PEC)
 
 ```mermaid
 sequenceDiagram
@@ -97,4 +97,20 @@ sequenceDiagram
 
   deactivate M
 
+```
+
+### Driver internal methods
+
+```mermaid
+graph TD;
+  ISR --> ON_ADDR_MATCH
+  ISR --> ON_DATA
+  ISR --> ON_STOP
+
+  ON_ADDR_MATCH --> ACK
+  ON_ADDR_MATCH --> ON_RESTART
+  ON_ADDR_MATCH ----> ON_MASTER_READ
+
+  ON_DATA --> ON_MASTER_WRITE(ON_MASTER_WRITE<br/>Master has sent a new byte)
+  ON_DATA --> ON_MASTER_READ(ON_MASTER_READ<br/>Master is going to read a new byte)
 ```

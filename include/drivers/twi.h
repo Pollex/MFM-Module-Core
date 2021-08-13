@@ -4,12 +4,14 @@
 #include <stdint.h>
 #include "ev_events.h"
 
+#define TWI_BUFFER_LENGTH 32
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  void twi_init(void);
+  void twi_init(uint8_t addr);
   void twi_ack(void);
   void twi_nack(void);
   uint8_t twi_available(void);

@@ -8,12 +8,11 @@
 #define EV_QUEUE_SIZE 32
 #endif
 
-struct ev
+typedef struct ev
 {
   uint8_t id;
   void *data;
-};
-typedef ev ev_t;
+} ev_t;
 
 #ifdef __cplusplus
 extern "C"

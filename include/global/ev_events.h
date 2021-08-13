@@ -8,6 +8,7 @@ enum events
   // TWI events
   EV_SMBUS_ASSERT_CMD,
   EV_SMBUS_CMD,
+  EV_SMBUS_ERR,
 };
 
 #endif // _EV_EVENTS_H_
