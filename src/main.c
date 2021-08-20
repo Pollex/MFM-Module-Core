@@ -7,7 +7,7 @@
 #include "events.h"
 #include "drivers/twi.h"
 
-void process_events(void);
+const static uint8_t message[] = "Hello world!";
 
 int main(void)
 {
@@ -22,26 +22,13 @@ int main(void)
     ;
 }
 
-void process_events(void)
+void twi_cmd_10_handler(uint8_t *data, uint8_t len)
 {
-  // Get the next event
-  ev_t *current_event = ev_dequeue();
-  if (!current_event)
-    return;
-
-  // Process current event
-  switch (current_event->id)
-  {
-  // Fired when a command byte is received
-  // User must check if the command exists
-  case EV_SMBUS_ASSERT_CMD:
-    twi_ack();
-    break;
-
-  // Fired when a command w/ data is received
-  // User must process the command
-  case EV_SMBUS_CMD:
-    // TODO: process command
-    break;
-  }
+  PORTA.OUTTGL = PIN6_bm;
+  // Copy message to data buffer
+  memcpy(data, message, sizeof(message));
 }
+
+twi_cmd_t twi_cmds[] = {
+    {0x10, twi_cmd_10_handler},
+};
