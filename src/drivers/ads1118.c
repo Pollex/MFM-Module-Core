@@ -3,11 +3,7 @@
 #include <avr/io.h>
 #include "mcu/spi.h"
 
-#define MODE_bm (0b1 << 0x08)
-#define MUX_bp 0x0C
-#define MUX_bm (0b111 << MUX_bp)
-
-#define CS_PORT(ads) (*(PORT_t *)ads->cs_port)
+#define CS_PORT(ads) (*(ads->cs_port))
 
 static const float fsr_map[] = {
     6.114,

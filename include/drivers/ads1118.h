@@ -1,14 +1,15 @@
 #if !defined(_DRIVER_ADS1118_H_)
 #define _DRIVER_ADS1118_H_
 
+#include <avr/io.h>
 #include <stdint.h>
 
-#define ADS1118_PGA_6114 0b000;
-#define ADS1118_PGA_4096 0b001;
-#define ADS1118_PGA_2048 0b010;
-#define ADS1118_PGA_1024 0b011;
-#define ADS1118_PGA_0512 0b100;
-#define ADS1118_PGA_0256 0b001;
+#define ADS1118_PGA_6114 0b000
+#define ADS1118_PGA_4096 0b001
+#define ADS1118_PGA_2048 0b010
+#define ADS1118_PGA_1024 0b011
+#define ADS1118_PGA_0512 0b100
+#define ADS1118_PGA_0256 0b001
 #define ADS1118_MODE_CONTINUOUS 0b0
 #define ADS1118_MODE_SINGLESHOT 0b1
 #define ADS1118_DR_8 0b000
@@ -32,15 +33,34 @@
 #define ADS1118_NOP_INVALID 0b00
 #define ADS1118_NOP_VALID 0b01
 
-#define ADS1118_CONFIG(PGA, MODE, DR, PULLUP) ( \
-    ((PGA & 0x03) << 9) |                       \
-    ((MODE & 0x01) << 8) |                      \
-    ((DR & 0x03) << 5) |                        \
-    ((PULLUP & 0x01) << 3) |                    \
-    (ADS1118_NOP_VALID << 1))
+#define ADS1118_SS_bp 0x0F
+#define ADS1118_SS_bm (0b1 << ADS1118_SS_bp)
+#define ADS1118_MUX_bp 0x0C
+#define ADS1118_MUX_bm (0b111 << ADS1118_MUX_bp)
+#define ADS1118_PGA_bp 0x09
+#define ADS1118_PGA_bm (0b111 << ADS1118_PGA_bp)
+#define ADS1118_MODE_bp 0x08
+#define ADS1118_MODE_bm (0b1 << ADS1118_MODE_bp)
+#define ADS1118_DR_bp 0x05
+#define ADS1118_DR_bm (0b111 << ADS1118_DR_bp)
+#define ADS1118_TS_MODE_bp 0x04
+#define ADS1118_TS_MODE_bm (0b1 << ADS1118_TS_MODE_bp)
+#define ADS1118_PULLUP_bp 0x01
+#define ADS1118_PULLUP_bm (0b1 << ADS1118_PULLUP_bp)
+#define ADS1118_NOP_bp 0x01
+#define ADS1118_NOP_bm (0b11 << ADS1118_NOP_bp)
+
+#define ADS1118_CONFIG(MODE, MUX, PGA, DR, PULLUP) (      \
+    ((MODE << ADS1118_MODE_bp) & ADS1118_MODE_bm) |       \
+    ((MUX << ADS1118_MUX_bp) & ADS1118_MUX_bm) |          \
+    ((PGA << ADS1118_PGA_bp) & ADS1118_PGA_bm) |          \
+    ((DR << ADS1118_DR_bp) & ADS1118_DR_bm) |             \
+    ((PULLUP << ADS1118_PULLUP_bp) & ADS1118_PULLUP_bm) | \
+    ((ADS1118_NOP_VALID << ADS1118_NOP_bp) & ADS1118_NOP_bm))
 
 typedef union
 {
+  uint16_t word;
   struct
   {
     uint8_t reserved : 1;
@@ -53,7 +73,6 @@ typedef union
     uint8_t mux : 3;
     uint8_t single_shot : 1;
   } bits;
-  uint16_t word;
   struct
   {
     uint8_t lsb;
@@ -63,7 +82,7 @@ typedef union
 
 typedef struct
 {
-  uint8_t cs_port;
+  PORT_t *cs_port;
   uint8_t cs_pin;
   ads1118_config config;
 } ads1118_t;

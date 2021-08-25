@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "twi.h": "c"
+    "twi.h": "c",
+    "ads1118.h": "c"
   }
 }
