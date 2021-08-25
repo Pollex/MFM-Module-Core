@@ -72,7 +72,7 @@ typedef union
     uint8_t pga : 3;
     uint8_t mux : 3;
     uint8_t single_shot : 1;
-  } bits;
+  } fields;
   struct
   {
     uint8_t lsb;
@@ -93,7 +93,7 @@ extern "C"
 #endif
 
   void ads1118_init(ads1118_t *);
-  void ads1118_mux(ads1118_t *, uint8_t mux);
+  void ads1118_setup(ads1118_t *ads);
   double ads1118_read(ads1118_t *);
 
 #ifdef __cplusplus

@@ -13,6 +13,10 @@ int main(void)
   spi_init();
   ads1118_init(&ads);
 
+  // Change mux
+  ads.config.fields.mux = ADS1118_MUX_AIN1_GND;
+  ads1118_setup(&ads);
+
   for (;;)
     ;
 }

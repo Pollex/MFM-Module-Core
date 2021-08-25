@@ -50,17 +50,22 @@ uint16_t transfer(ads1118_t *ads)
   return (conv_h << 8) | conv_l;
 }
 
+void ads1118_setup(ads1118_t *ads)
+{
+  transfer(ads);
+}
+
 void ads1118_init(ads1118_t *ads)
 {
   CS_PORT(ads).DIRSET = 1 << ads->cs_pin;
   deselect(ads);
 
-  transfer(ads);
+  ads1118_setup(ads);
 }
 
 double ads1118_read(ads1118_t *ads)
 {
-  uint8_t is_singleshot = ads->config.bits.mode;
+  uint8_t is_singleshot = ads->config.fields.mode;
   uint16_t conversion;
   double millivolts;
 
@@ -72,7 +77,7 @@ double ads1118_read(ads1118_t *ads)
   conversion = transfer(ads); // Read newest conversion results
 
   // Calculate the resolution for the chosen gain
-  float resolution = RESOLUTION(ads->config.bits.pga);
+  float resolution = RESOLUTION(ads->config.fields.pga);
 
   // If conversion is a positive temperature (MSB is 0)
   if ((conversion & 0x8000) == 0)
@@ -86,10 +91,4 @@ double ads1118_read(ads1118_t *ads)
   }
 
   return millivolts;
-}
-
-void ads1118_mux(ads1118_t *ads, uint8_t mux)
-{
-  ads->config.bits.mux = mux;
-  transfer(ads);
 }
