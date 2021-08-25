@@ -5,8 +5,8 @@
 #include <avr/interrupt.h>
 #include "ev_events.h"
 #include "events.h"
-#include "drivers/twi.h"
-#include "drivers/uart.h"
+#include "mcu/twi.h"
+#include "mcu/uart.h"
 
 const static uint8_t message[] = "Hello world!";
 
