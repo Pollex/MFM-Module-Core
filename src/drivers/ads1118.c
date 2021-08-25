@@ -3,10 +3,21 @@
 #include <avr/io.h>
 #include "mcu/spi.h"
 
-#define MODE_bm 1 << 0x08
-#define RESOLUTION 0.03125
+#define MODE_bm (0b1 << 0x08)
+#define MUX_bp 0x0C
+#define MUX_bm (0b111 << MUX_bp)
 
 #define CS_PORT(ads) (*(PORT_t *)ads->cs_port)
+
+static const float fsr_map[] = {
+    6.114,
+    4.096,
+    2.048,
+    1.024,
+    0.512,
+    0.256};
+
+#define RESOLUTION(PGA) (fsr_map[PGA] / (float)65536)
 
 void select(ads1118_t *ads)
 {
@@ -27,49 +38,62 @@ void delay_8us(void)
   }
 }
 
+/**
+ * @brief Transfers the config to the ADS1118 and returns the conversion register
+ * 
+ * @param ads The ADS1118_t struct
+ * @return uint16_t Conversion register
+ */
 uint16_t transfer(ads1118_t *ads)
 {
-  uint8_t cfg_h = ads->config >> 8;
-  uint8_t cfg_l = ads->config;
-
   select(ads);
-  uint8_t conv_h = spi_transfer(cfg_h);
-  uint8_t conv_l = spi_transfer(cfg_l);
+  uint8_t conv_h = spi_transfer(ads->config.byte.msb);
+  uint8_t conv_l = spi_transfer(ads->config.byte.lsb);
   deselect(ads);
 
-  uint16_t conversion = (conv_h << 8) | conv_l;
-
-  float temperature;
-
-  // If conversion is a positive temperature (MSB is 0)
-  if ((conversion & 0x8000) == 0)
-  {
-    temperature = conversion * RESOLUTION;
-  }
-  else
-  { // Conversion is a negative number
-    conversion -= 1;
-    conversion = ~(conversion);
-    temperature = conversion * -RESOLUTION;
-  }
-
-  return temperature;
+  return (conv_h << 8) | conv_l;
 }
 
 void ads1118_init(ads1118_t *ads)
 {
   CS_PORT(ads).DIRSET = 1 << ads->cs_pin;
   deselect(ads);
+
+  transfer(ads);
 }
 
-float ads1118_read(ads1118_t *ads)
+double ads1118_read(ads1118_t *ads)
 {
-  uint8_t is_singleshot = ads->config & MODE_bm;
+  uint8_t is_singleshot = ads->config.bits.mode;
+  uint16_t conversion;
+  double millivolts;
 
   if (is_singleshot)
   {
     transfer(ads); // Perform Single Shot measurement
     delay_8us();   // Wait 8 US to complete WARN: Should wait for MOSI to go low...
   }
-  return transfer(ads); // Read newest conversion results
+  conversion = transfer(ads); // Read newest conversion results
+
+  // Calculate the resolution for the chosen gain
+  float resolution = RESOLUTION(ads->config.bits.pga);
+
+  // If conversion is a positive temperature (MSB is 0)
+  if ((conversion & 0x8000) == 0)
+  {
+    millivolts = conversion * resolution;
+  }
+  else
+  { // Conversion is a negative number
+    conversion = ~(conversion - 1);
+    millivolts = conversion * -resolution;
+  }
+
+  return millivolts;
+}
+
+void ads1118_mux(ads1118_t *ads, uint8_t mux)
+{
+  ads->config.bits.mux = mux;
+  transfer(ads);
 }
