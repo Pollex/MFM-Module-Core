@@ -15,8 +15,16 @@ int main(void)
 
   // Change mux
   ads.config.fields.mux = ADS1118_MUX_AIN1_GND;
+
+  // Explicitly push new configuration to the device.
+  // Note that reading also updates the configuration. However, this method may be useful to put the device in
+  // continuous mode without having to read the value
   ads1118_setup(&ads);
 
   for (;;)
-    ;
+  {
+    double millivolts = ads1118_read(&ads);
+    // Do something
+    // TODO: Send to UART
+  }
 }
