@@ -11,14 +11,18 @@ static const float fsr_map[] = {
     2.048,
     1.024,
     0.512,
-    0.256};
+    0.256,
+    0.256,
+    0.256,
+};
 
-#define RESOLUTION(PGA) (fsr_map[PGA] / (float)65536)
+#define RESOLUTION(PGA) (fsr_map[PGA] / (float)32768)
 
 void select(ads1118_t *ads)
 {
   CS_PORT(ads).OUTCLR = 1 << ads->cs_pin;
 }
+
 void deselect(ads1118_t *ads)
 {
   CS_PORT(ads).OUTSET = 1 << ads->cs_pin;
@@ -45,6 +49,8 @@ uint16_t transfer(ads1118_t *ads)
   select(ads);
   uint8_t conv_h = spi_transfer(ads->config.byte.msb);
   uint8_t conv_l = spi_transfer(ads->config.byte.lsb);
+  spi_transfer(ads->config.byte.msb);
+  spi_transfer(ads->config.byte.lsb);
   deselect(ads);
 
   return (conv_h << 8) | conv_l;
@@ -63,11 +69,11 @@ void ads1118_init(ads1118_t *ads)
   ads1118_setup(ads);
 }
 
-double ads1118_read(ads1118_t *ads)
+float ads1118_read(ads1118_t *ads)
 {
   uint8_t is_singleshot = ads->config.fields.mode;
   uint16_t conversion;
-  double millivolts;
+  float millivolts;
 
   if (is_singleshot)
   {
@@ -86,8 +92,8 @@ double ads1118_read(ads1118_t *ads)
   }
   else
   { // Conversion is a negative number
-    conversion = ~(conversion - 1);
-    millivolts = conversion * -resolution;
+    conversion = (~(conversion) + 1);
+    millivolts = (float)(conversion * resolution) * -1;
   }
 
   return millivolts;

@@ -94,7 +94,7 @@ extern "C"
 
   void ads1118_init(ads1118_t *);
   void ads1118_setup(ads1118_t *ads);
-  double ads1118_read(ads1118_t *);
+  float ads1118_read(ads1118_t *);
 
 #ifdef __cplusplus
 }
