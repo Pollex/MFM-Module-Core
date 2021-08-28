@@ -18,9 +18,6 @@ void spi_init(void)
 
 uint8_t spi_transfer(uint8_t data)
 {
-  // Wait for data register to be empty so we can send new data
-  while (!(SPI0.INTFLAGS & SPI_DREIF_bm))
-    ;
   // Set new tx byte
   SPI0.DATA = data;
   // Wait for byte to be sent
