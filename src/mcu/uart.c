@@ -6,7 +6,7 @@
   TX = PB2
 */
 
-#define F_CPU 16000000
+#define F_CPU 2666666L
 #define BAUD(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 void uart_init(uint16_t baud)
@@ -18,7 +18,6 @@ void uart_init(uint16_t baud)
 
   // Set UART formats
   USART0.BAUD = (uint16_t)BAUD(9600);
-  USART0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc;
 
   // Enable Receiver and Transmitter
   USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
