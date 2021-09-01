@@ -18,15 +18,20 @@ void uart_init(uart_t *uart)
   USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
   USART0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc | USART_CHSIZE_8BIT_gc;
 
+  // Set UART formats
+  USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
+
+  USART0.CTRLB = 0;
+
   // Enable Receiver
-  if (uart->rx_enabled)
+  if (uart->config.rx_enabled)
   {
     PORTB.DIRCLR = PIN3_bm;
     USART0.CTRLB |= USART_RXEN_bm;
   }
 
   // Enable Transmitter
-  if (uart->tx_enabled)
+  if (uart->config.tx_enabled)
   {
     PORTB.DIRSET = PIN2_bm;
     PORTB.OUTSET = PIN2_bm;
@@ -45,7 +50,6 @@ uint8_t uart_getc(uart_t *uart)
 {
   while (!(USART0.STATUS & USART_RXCIF_bm))
     ;
-  // (void)USART0.RXDATAH;
   return USART0.RXDATAL;
 }
 

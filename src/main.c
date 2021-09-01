@@ -6,16 +6,17 @@
 
 #include "mcu/twi.h"
 #include "mcu/spi.h"
-#include "drivers/sen0313.h"
+#include "mcu/uart.h"
+// #include "drivers/sen0313.h"
 
 #define SENSOR_ENABLE_PORT PORTA
 #define SENSOR_ENABLE_PIN PIN5
 
-sen0313_t sen0313 = {
-    .tx_port = &PORTB,
-    .tx_pin = PIN2,
-    .mode = SEN0313_MODE_RAW,
-};
+// sen0313_t sen0313 = {
+//     .tx_port = &PORTB,
+//     .tx_pin = PIN2,
+//     .mode = SEN0313_MODE_RAW,
+// };
 
 void sensors_on(void)
 {
@@ -27,7 +28,12 @@ void sensors_off(void)
   SENSOR_ENABLE_PORT.OUTCLR = (1 << SENSOR_ENABLE_PIN);
 }
 
-uint8_t sen_buf[3] = {0};
+uart_t uart = {
+    .baudrate = 9600,
+    .config = {
+        .rx_enabled = 1,
+        .tx_enabled = 0}};
+
 int main(void)
 {
   sei();
@@ -35,20 +41,15 @@ int main(void)
   PORTA.DIRSET = PIN6_bm; // SMBAlert
   sensors_on();
 
+  uart_init(&uart);
   spi_init();
 
-  sen0313_init(&sen0313);
+  // sen0313_init(&sen0313);
 
   // Infinite loop
   for (;;)
   {
-    sen0313_debug(&sen0313, sen_buf);
-
-    for (int i = 0; i < 3; i++)
-      spi_transfer(sen_buf[i]);
-
-    for (uint32_t i = 0; i < 500000; i++)
-      __asm("nop");
+    spi_transfer(uart_getc(&uart));
   }
 }
 

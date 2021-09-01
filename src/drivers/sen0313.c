@@ -5,8 +5,9 @@
 
 uart_t sen0313_uart = {
     .baudrate = 9600,
-    .rx_enabled = 1,
-    .tx_enabled = 0};
+    .config = {
+        .rx_enabled = 1,
+        .tx_enabled = 0}};
 
 void sen0313_init(sen0313_t *sen)
 {
