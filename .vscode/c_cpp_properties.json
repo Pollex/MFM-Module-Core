@@ -13,7 +13,6 @@
                 "/home/timvosch/src/mfm-module-core/lib/events/include",
                 "/home/timvosch/src/mfm-module-core/lib/events/src",
                 "/home/timvosch/src/mfm-module-core/include/global",
-                "/home/timvosch/.platformio/lib/FHT",
                 "/home/timvosch/.platformio/packages/tool-unity",
                 ""
             ],
@@ -25,7 +24,6 @@
                     "/home/timvosch/src/mfm-module-core/lib/events/include",
                     "/home/timvosch/src/mfm-module-core/lib/events/src",
                     "/home/timvosch/src/mfm-module-core/include/global",
-                    "/home/timvosch/.platformio/lib/FHT",
                     "/home/timvosch/.platformio/packages/tool-unity",
                     ""
                 ]
@@ -40,7 +38,7 @@
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "/home/timvosch/.platformio/packages/toolchain-atmelavr@1.70300.191015/bin/avr-gcc",
+            "compilerPath": "/home/timvosch/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
             "compilerArgs": [
                 "-mmcu=attiny814",
                 ""
