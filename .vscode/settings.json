@@ -1,6 +1,10 @@
 {
   "files.associations": {
     "twi.h": "c",
-    "ads1118.h": "c"
+    "ads1118.h": "c",
+    "uart.h": "c",
+    "interrupt.h": "c",
+    "stdint.h": "c",
+    "sen0313.h": "c"
   }
 }

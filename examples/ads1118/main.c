@@ -3,10 +3,18 @@
 #include "drivers/ads1118.h"
 
 ads1118_t ads = {
-    .cs_port = &PORTB,
-    .cs_pin = PIN2,
-    .config = ADS1118_CONFIG(ADS1118_MODE_SINGLESHOT, ADS1118_MUX_AIN0_GND, ADS1118_PGA_4096, ADS1118_DR_8, ADS1118_PULLUP_DISABLE),
-};
+    .cs_port = &PORTA,
+    .cs_pin = PIN6,
+    .config = {
+        .fields = {
+            .mux = ADS1118_MUX_AIN0_GND,
+            .pga = ADS1118_PGA_4096,
+            .mode = ADS1118_MODE_CONTINUOUS,
+            .datarate = ADS1118_DR_128,
+            .temperature_mode = 0,
+            .pull_up = ADS1118_PULLUP_DISABLE,
+            .nop = ADS1118_NOP_VALID,
+        }}};
 
 int main(void)
 {
