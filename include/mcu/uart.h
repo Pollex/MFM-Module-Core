@@ -7,7 +7,7 @@ typedef struct
 {
   uint8_t rx_enabled;
   uint8_t tx_enabled;
-  uint8_t baudrate;
+  uint16_t baudrate;
 } uart_t;
 
 #ifdef __cplusplus
