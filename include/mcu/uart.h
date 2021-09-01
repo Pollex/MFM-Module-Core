@@ -10,6 +10,7 @@ extern "C"
   void uart_init(uint16_t baud);
   void uart_write(uint8_t);
   uint8_t uart_read(void);
+  void uart_print(uint8_t *);
 #ifdef __cplusplus
 }
 #endif

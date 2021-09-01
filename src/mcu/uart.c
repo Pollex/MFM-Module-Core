@@ -46,3 +46,11 @@ uint8_t uart_read()
   uart_wait_rx_complete();
   return USART0.RXDATAL;
 }
+
+void uart_print(uint8_t *str)
+{
+  for (uint8_t i = 0; str[i] != '\0'; i++)
+  {
+    uart_write(str[i]);
+  }
+}
