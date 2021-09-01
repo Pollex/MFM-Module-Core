@@ -11,10 +11,12 @@
 
 void uart_init(uart_t *uart)
 {
-  // Set UART formats
-  USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
+  // Disable USART
+  USART0.CTRLB &= ~(USART_RXEN_bm | USART_TXEN_bm);
 
-  USART0.CTRLB = 0;
+  //
+  USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
+  USART0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc | USART_CHSIZE_8BIT_gc;
 
   // Enable Receiver
   if (uart->rx_enabled)
@@ -43,6 +45,7 @@ uint8_t uart_getc(uart_t *uart)
 {
   while (!(USART0.STATUS & USART_RXCIF_bm))
     ;
+  // (void)USART0.RXDATAH;
   return USART0.RXDATAL;
 }
 

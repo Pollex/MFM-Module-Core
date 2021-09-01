@@ -3,14 +3,14 @@
 
 #define TX_PORT(sen) (*(sen->tx_port))
 
-uart_t uart = {
+uart_t sen0313_uart = {
     .baudrate = 9600,
     .rx_enabled = 1,
     .tx_enabled = 0};
 
 void sen0313_init(sen0313_t *sen)
 {
-  uart_init(&uart);
+  uart_init(&sen0313_uart);
   TX_PORT(sen).DIRSET = 1 << sen->tx_pin;
   sen0313_setup(sen);
 }
@@ -32,12 +32,12 @@ uint16_t sen0313_read(sen0313_t *sen)
   // Wait for a start byte
   do
   {
-    buffer[0] = uart_getc(&uart);
+    buffer[0] = uart_getc(&sen0313_uart);
   } while (buffer[0] != 0xFF);
 
   // Read other bytes
   for (uint8_t i = 1; i < 4; i++)
-    buffer[i] = uart_getc(&uart);
+    buffer[i] = uart_getc(&sen0313_uart);
 
   uint16_t checksum = (buffer[0] + buffer[1] + buffer[2]) & 0x00FF;
   if (checksum != buffer[3])
@@ -52,10 +52,10 @@ uint16_t sen0313_read(sen0313_t *sen)
 void sen0313_debug(sen0313_t *sen, uint8_t *buffer)
 {
   // Wait for a start byte
-  while (uart_getc(&uart) != 0xFF)
+  while (uart_getc(&sen0313_uart) != 0xFF)
     ;
 
   // Read other bytes
   for (uint8_t i = 0; i < 3; i++)
-    buffer[i] = uart_getc(&uart);
+    buffer[i] = uart_getc(&sen0313_uart);
 }
