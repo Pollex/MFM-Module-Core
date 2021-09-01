@@ -5,8 +5,14 @@
 
 typedef struct
 {
-  uint8_t rx_enabled;
-  uint8_t tx_enabled;
+  union
+  {
+    struct
+    {
+      uint8_t rx_enabled : 1;
+      uint8_t tx_enabled : 1;
+    };
+  } config;
   uint8_t baudrate;
 } uart_t;
 

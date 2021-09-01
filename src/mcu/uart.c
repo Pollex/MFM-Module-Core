@@ -17,14 +17,14 @@ void uart_init(uart_t *uart)
   USART0.CTRLB = 0;
 
   // Enable Receiver
-  if (uart->rx_enabled)
+  if (uart->config.rx_enabled)
   {
     PORTB.DIRCLR = PIN3_bm;
     USART0.CTRLB |= USART_RXEN_bm;
   }
 
   // Enable Transmitter
-  if (uart->tx_enabled)
+  if (uart->config.tx_enabled)
   {
     PORTB.DIRSET = PIN2_bm;
     PORTB.OUTSET = PIN2_bm;
