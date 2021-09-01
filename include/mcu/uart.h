@@ -3,14 +3,21 @@
 
 #include <stdint.h>
 
+typedef struct
+{
+  uint8_t rx_enabled;
+  uint8_t tx_enabled;
+  uint8_t baudrate;
+} uart_t;
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-  void uart_init(uint16_t baud);
-  void uart_write(uint8_t);
-  uint8_t uart_read(void);
-  void uart_print(uint8_t *);
+  void uart_init(uart_t *);
+  void uart_putc(uart_t *, uint8_t);
+  uint8_t uart_getc(uart_t *);
+  void uart_print(uart_t *, uint8_t *);
 #ifdef __cplusplus
 }
 #endif

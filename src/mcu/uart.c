@@ -9,48 +9,47 @@
 #define F_CPU 2666666L
 #define BAUD(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
-void uart_init(uint16_t baud)
+void uart_init(uart_t *uart)
 {
-  // Set PORT directions and outputs
-  PORTB.DIRSET = PIN2_bm;
-  PORTB.DIRCLR = PIN3_bm;
-  PORTA.OUTSET = PIN2_bm;
-
   // Set UART formats
-  USART0.BAUD = (uint16_t)BAUD(9600);
+  USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
 
-  // Enable Receiver and Transmitter
-  USART0.CTRLB = USART_RXEN_bm | USART_TXEN_bm;
+  USART0.CTRLB = 0;
+
+  // Enable Receiver
+  if (uart->rx_enabled)
+  {
+    PORTB.DIRCLR = PIN3_bm;
+    USART0.CTRLB |= USART_RXEN_bm;
+  }
+
+  // Enable Transmitter
+  if (uart->tx_enabled)
+  {
+    PORTB.DIRSET = PIN2_bm;
+    PORTB.OUTSET = PIN2_bm;
+    USART0.CTRLB |= USART_TXEN_bm;
+  }
 }
 
-void uart_wait_tx_ready(void)
+void uart_putc(uart_t *uart, uint8_t data)
 {
   while (!(USART0.STATUS & USART_DREIF_bm))
     ;
-}
-
-void uart_wait_rx_complete(void)
-{
-  while (!(USART0.STATUS & USART_RXCIF_bm))
-    ;
-}
-
-void uart_write(uint8_t data)
-{
-  uart_wait_tx_ready();
   USART0.TXDATAL = data;
 }
 
-uint8_t uart_read()
+uint8_t uart_getc(uart_t *uart)
 {
-  uart_wait_rx_complete();
+  while (!(USART0.STATUS & USART_RXCIF_bm))
+    ;
   return USART0.RXDATAL;
 }
 
-void uart_print(uint8_t *str)
+void uart_print(uart_t *uart, uint8_t *str)
 {
   for (uint8_t i = 0; str[i] != '\0'; i++)
   {
-    uart_write(str[i]);
+    uart_putc(uart, str[i]);
   }
 }
