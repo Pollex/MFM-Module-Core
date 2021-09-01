@@ -22,6 +22,7 @@ extern "C"
   void sen0313_init(sen0313_t *);
   void sen0313_setup(sen0313_t *);
   uint16_t sen0313_read(sen0313_t *);
+  void sen0313_debug(sen0313_t *, uint8_t *);
 
 #ifdef __cplusplus
 }

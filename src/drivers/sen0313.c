@@ -1,12 +1,17 @@
 #include "drivers/sen0313.h"
 #include "mcu/uart.h"
 
-#define TX_PORT(ads) (*(sen->tx_port))
+#define TX_PORT(sen) (*(sen->tx_port))
+
+uart_t uart = {
+    .baudrate = 9600,
+    .rx_enabled = 1,
+    .tx_enabled = 0};
 
 void sen0313_init(sen0313_t *sen)
 {
-  uart_init(9600);
-  TX_PORT(ads).DIRSET = 1 << sen->tx_pin;
+  uart_init(&uart);
+  TX_PORT(sen).DIRSET = 1 << sen->tx_pin;
   sen0313_setup(sen);
 }
 
@@ -14,32 +19,43 @@ void sen0313_setup(sen0313_t *sen)
 {
   if (sen->mode == SEN0313_MODE_RAW)
   {
-    TX_PORT(ads).OUTSET = 1 << sen->tx_pin;
+    TX_PORT(sen).OUTSET = 1 << sen->tx_pin;
     return;
   }
-  TX_PORT(ads).OUTCLR = 1 << sen->tx_pin;
+  TX_PORT(sen).OUTCLR = 1 << sen->tx_pin;
 }
 
 uint16_t sen0313_read(sen0313_t *sen)
 {
-  uint8_t buffer[3] = {0};
+  uint8_t buffer[4] = {0};
 
   // Wait for a start byte
-  while (uart_read() != 0xFF)
-    ;
-
-  // Wait for the first byte
   do
   {
-    buffer[0] = uart_read();
-  } while (buffer[0] == 0xFF);
-  buffer[1] = uart_read();
-  buffer[2] = uart_read();
+    buffer[0] = uart_getc(&uart);
+  } while (buffer[0] != 0xFF);
 
-  uint16_t checksum = (0xFF + buffer[0] + buffer[1]) & 0x00FF;
-  if (checksum != buffer[2])
+  // Read other bytes
+  for (uint8_t i = 1; i < 4; i++)
+    buffer[i] = uart_getc(&uart);
+
+  uint16_t checksum = (buffer[0] + buffer[1] + buffer[2]) & 0x00FF;
+  if (checksum != buffer[3])
   {
-    // return 0xffff;
+    return 0xFFFF;
   }
-  return (buffer[0] << 8) | buffer[1];
+
+  uint16_t distance = (buffer[0] << 8) | buffer[1];
+  return distance / 10;
+}
+
+void sen0313_debug(sen0313_t *sen, uint8_t *buffer)
+{
+  // Wait for a start byte
+  while (uart_getc(&uart) != 0xFF)
+    ;
+
+  // Read other bytes
+  for (uint8_t i = 0; i < 3; i++)
+    buffer[i] = uart_getc(&uart);
 }

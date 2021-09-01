@@ -1,6 +1,5 @@
 #include "main.h"
 
-#include <stdio.h>
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
@@ -28,6 +27,7 @@ void sensors_off(void)
   SENSOR_ENABLE_PORT.OUTCLR = (1 << SENSOR_ENABLE_PIN);
 }
 
+uint8_t sen_buf[3] = {0};
 int main(void)
 {
   sei();
@@ -42,9 +42,10 @@ int main(void)
   // Infinite loop
   for (;;)
   {
-    uint16_t dist_mm = sen0313_read(&sen0313);
-    spi_transfer(dist_mm >> 8);
-    spi_transfer(dist_mm);
+    sen0313_debug(&sen0313, sen_buf);
+
+    for (int i = 0; i < 3; i++)
+      spi_transfer(sen_buf[i]);
 
     for (uint32_t i = 0; i < 500000; i++)
       __asm("nop");
