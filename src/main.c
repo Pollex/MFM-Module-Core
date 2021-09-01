@@ -1,43 +1,56 @@
 #include "main.h"
 
+#include <stdio.h>
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
-#include "ev_events.h"
-#include "events.h"
-#include "mcu/twi.h"
-#include "mcu/uart.h"
 
-const static uint8_t message[] = "Hello world!";
+#include "mcu/twi.h"
+#include "mcu/spi.h"
+#include "drivers/sen0313.h"
+
+#define SENSOR_ENABLE_PORT PORTA
+#define SENSOR_ENABLE_PIN PIN5
+
+sen0313_t sen0313 = {
+    .tx_port = &PORTB,
+    .tx_pin = PIN2,
+    .mode = SEN0313_MODE_RAW,
+};
+
+void sensors_on(void)
+{
+  SENSOR_ENABLE_PORT.OUTSET = (1 << SENSOR_ENABLE_PIN);
+}
+
+void sensors_off(void)
+{
+  SENSOR_ENABLE_PORT.OUTCLR = (1 << SENSOR_ENABLE_PIN);
+}
 
 int main(void)
 {
   sei();
-  twi_init(0x36);
+  SENSOR_ENABLE_PORT.DIRSET = 1 << SENSOR_ENABLE_PIN;
+  PORTA.DIRSET = PIN6_bm; // SMBAlert
+  sensors_on();
 
-  uart_init(9600);
+  spi_init();
 
-  PORTA.DIRSET = PIN6_bm;
-  PORTA.OUTCLR = PIN6_bm;
+  sen0313_init(&sen0313);
 
   // Infinite loop
   for (;;)
-    ;
-}
-
-void twi_cmd_10_handler(uint8_t *data, uint8_t len)
-{
-  PORTA.OUTTGL = PIN6_bm;
-  // Copy message to data buffer
-  memcpy(data, message, sizeof(message));
-
-  // Send message over uart
-  for (uint8_t i = 0; i < sizeof(message); i++)
   {
-    uart_write(message[i]);
+    uint16_t dist_mm = sen0313_read(&sen0313);
+    spi_transfer(dist_mm >> 8);
+    spi_transfer(dist_mm);
+
+    for (uint32_t i = 0; i < 500000; i++)
+      __asm("nop");
   }
 }
 
 twi_cmd_t twi_cmds[] = {
-    {0x10, twi_cmd_10_handler},
+    // {0x10, twi_cmd_10_handler},
 };
