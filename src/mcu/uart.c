@@ -36,21 +36,21 @@ void uart_init(uart_t *uart)
   }
 }
 
-void uart_putc(uart_t *uart, uint8_t data)
+void uart_putc(uart_t *uart, char data)
 {
   while (!(USART0.STATUS & USART_DREIF_bm))
     ;
   USART0.TXDATAL = data;
 }
 
-uint8_t uart_getc(uart_t *uart)
+char uart_getc(uart_t *uart)
 {
   while (!(USART0.STATUS & USART_RXCIF_bm))
     ;
   return USART0.RXDATAL;
 }
 
-void uart_print(uart_t *uart, uint8_t *str)
+void uart_print(uart_t *uart, char *str)
 {
   for (uint8_t i = 0; str[i] != '\0'; i++)
   {

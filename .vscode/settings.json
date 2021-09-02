@@ -5,6 +5,7 @@
     "uart.h": "c",
     "interrupt.h": "c",
     "stdint.h": "c",
-    "sen0313.h": "c"
+    "sen0313.h": "c",
+    "stdio.h": "c"
   }
 }

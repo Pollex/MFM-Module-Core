@@ -21,9 +21,9 @@ extern "C"
 {
 #endif
   void uart_init(uart_t *);
-  void uart_putc(uart_t *, uint8_t);
-  uint8_t uart_getc(uart_t *);
-  void uart_print(uart_t *, uint8_t *);
+  void uart_putc(uart_t *, char);
+  char uart_getc(uart_t *);
+  void uart_print(uart_t *, char *);
 #ifdef __cplusplus
 }
 #endif
