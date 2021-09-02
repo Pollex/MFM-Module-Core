@@ -18,6 +18,11 @@ static const float fsr_map[] = {
 
 #define RESOLUTION(PGA) (fsr_map[PGA] / (float)32768)
 
+spi_t ads1118_spi = {
+    .data_order = SPI_DORD_MSB,
+    .mode = SPI_MODE_0,
+};
+
 void select(ads1118_t *ads)
 {
   CS_PORT(ads).OUTCLR = 1 << ads->cs_pin;
@@ -47,10 +52,10 @@ void delay_8us(void)
 uint16_t transfer(ads1118_t *ads)
 {
   select(ads);
-  uint8_t conv_h = spi_transfer(ads->config.byte.msb);
-  uint8_t conv_l = spi_transfer(ads->config.byte.lsb);
-  spi_transfer(ads->config.byte.msb);
-  spi_transfer(ads->config.byte.lsb);
+  uint8_t conv_h = spi_transfer(&ads1118_spi, ads->config.byte.msb);
+  uint8_t conv_l = spi_transfer(&ads1118_spi, ads->config.byte.lsb);
+  spi_transfer(&ads1118_spi, ads->config.byte.msb);
+  spi_transfer(&ads1118_spi, ads->config.byte.lsb);
   deselect(ads);
 
   return (conv_h << 8) | conv_l;
@@ -65,6 +70,8 @@ void ads1118_init(ads1118_t *ads)
 {
   CS_PORT(ads).DIRSET = 1 << ads->cs_pin;
   deselect(ads);
+
+  spi_init(&ads1118_spi);
 
   ads1118_setup(ads);
 }
