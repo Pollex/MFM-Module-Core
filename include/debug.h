@@ -5,15 +5,26 @@
 #include <stdint.h>
 #include "mcu/uart.h"
 
+void my_printf(const char *fmt, ...)
+{
+  va_list args;
+  va_start(args, fmt);
+  vprintf(fmt, args);
+  va_end(args);
+}
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
   char buf[32] = {0};
-  void uart_printf(uart_t *uart, const char *__fmt, va_list argp)
+  void uart_printf(uart_t *uart, const char *fmt, ...)
   {
-    sprintf(buf, __fmt, argp);
+    va_list args;
+    va_start(args, fmt);
+    sprintf(buf, fmt, args);
+    va_end(args);
     uart_print(uart, buf);
   }
 
