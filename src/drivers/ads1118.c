@@ -5,22 +5,24 @@
 
 #define CS_PORT(ads) (*(ads->cs_port))
 
-static const float fsr_map[] = {
-    6.114,
-    4.096,
-    2.048,
-    1.024,
-    0.512,
-    0.256,
-    0.256,
-    0.256,
+static const uint16_t fsr_map[] = {
+    6114,
+    4096,
+    2048,
+    1024,
+    512,
+    256,
+    256,
+    256,
 };
 
-#define RESOLUTION(PGA) (fsr_map[PGA] / (float)32768)
+#define F_CPU 2333333
+#define RESOLUTION(PGA) ((float)fsr_map[PGA] / (float)32768)
+#define CYCLES_PER_MS (F_CPU / 1000)
 
 spi_t ads1118_spi = {
     .data_order = SPI_DORD_MSB,
-    .mode = SPI_MODE_0,
+    .mode = SPI_MODE_1,
 };
 
 void select(ads1118_t *ads)
@@ -33,11 +35,9 @@ void deselect(ads1118_t *ads)
   CS_PORT(ads).OUTSET = 1 << ads->cs_pin;
 }
 
-void delay_8us(void)
+void delay_5ms(void)
 {
-  // Delay 8us. Assuming F_CLK is 20MHz that would mean 160 cycles.
-  // Just to be sure we take 200 cycles.
-  for (uint8_t ix = 0; ix < 200; ix++)
+  for (uint32_t ix = 0; ix < CYCLES_PER_MS * 5; ix++)
   {
     __asm("nop");
   }
@@ -84,8 +84,10 @@ float ads1118_read(ads1118_t *ads)
 
   if (is_singleshot)
   {
+    ads->config.fields.single_shot = 1;
     transfer(ads); // Perform Single Shot measurement
-    delay_8us();   // Wait 8 US to complete WARN: Should wait for MOSI to go low...
+    ads->config.fields.single_shot = 0;
+    delay_5ms(); // Wait to complete TODO: Should wait for MISO to go low...
   }
   conversion = transfer(ads); // Read newest conversion results
 
@@ -100,7 +102,7 @@ float ads1118_read(ads1118_t *ads)
   else
   { // Conversion is a negative number
     conversion = (~(conversion) + 1);
-    millivolts = (float)(conversion * resolution) * -1;
+    millivolts = ((float)conversion * resolution) * -1;
   }
 
   return millivolts;
