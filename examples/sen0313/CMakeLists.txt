@@ -1,2 +1,2 @@
-add_executable(sen0313 main.c)
-target_link_libraries(sen0313 mfmmod)
+add_avr_executable(sen0313 main.c)
+avr_target_link_libraries(sen0313 mfmmod)
