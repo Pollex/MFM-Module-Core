@@ -25,7 +25,7 @@ ev_t *ev_dequeue()
   // If head at the tail position then we have no new events
   if (ev_queue_head == ev_queue_tail)
   {
-    return nullptr;
+    return NULL;
   }
 
   ev_disableInterrupts();
