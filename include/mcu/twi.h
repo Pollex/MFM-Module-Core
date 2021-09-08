@@ -26,7 +26,6 @@ extern "C"
   void twi_init(uint8_t addr);
   void twi_ack(void);
   void twi_nack(void);
-  uint8_t twi_available(void);
 
 #ifdef __cplusplus
 }
