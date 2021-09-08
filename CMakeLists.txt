@@ -16,10 +16,12 @@ include(gcc-avr.cmake)
 
 set(PROJECT_NAME mfmmod)
 project(${PROJECT_NAME})
-include_directories(include)
 
 file(GLOB SRC_FILES "src/**/*.c") # Load all files in src folder
 add_avr_library(${PROJECT_NAME} ${SRC_FILES})
+include_directories(
+  "include/"
+)
 
 
 ######################
