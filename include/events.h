@@ -1,6 +1,7 @@
 #if !defined(_EVENTS_H_)
 #define _EVENTS_H_
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifndef EV_QUEUE_SIZE
