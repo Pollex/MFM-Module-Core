@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "ev_events.h"
 #include "events.h"
 
 uint8_t twi_buffer[TWI_BUFFER_LENGTH] = {0};

@@ -2,7 +2,6 @@
 #define _TWI_H_
 
 #include <stdint.h>
-#include "ev_events.h"
 
 #define TWI_BUFFER_LENGTH 32
 

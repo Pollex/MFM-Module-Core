@@ -1,5 +1,3 @@
-#include "main.h"
-
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>

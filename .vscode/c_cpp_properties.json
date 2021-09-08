@@ -1,49 +1,24 @@
-//
-// !!! WARNING !!! AUTO-GENERATED FILE!
-// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
-// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
-//
 {
-    "configurations": [
-        {
-            "name": "PlatformIO",
-            "includePath": [
-                "/home/timvosch/src/mfm-module-core/include",
-                "/home/timvosch/src/mfm-module-core/src",
-                "/home/timvosch/src/mfm-module-core/lib/events/include",
-                "/home/timvosch/src/mfm-module-core/lib/events/src",
-                "/home/timvosch/src/mfm-module-core/include/global",
-                "/home/timvosch/.platformio/packages/tool-unity",
-                ""
-            ],
-            "browse": {
-                "limitSymbolsToIncludedHeaders": true,
-                "path": [
-                    "/home/timvosch/src/mfm-module-core/include",
-                    "/home/timvosch/src/mfm-module-core/src",
-                    "/home/timvosch/src/mfm-module-core/lib/events/include",
-                    "/home/timvosch/src/mfm-module-core/lib/events/src",
-                    "/home/timvosch/src/mfm-module-core/include/global",
-                    "/home/timvosch/.platformio/packages/tool-unity",
-                    ""
-                ]
-            },
-            "defines": [
-                "F_CPU=16000000L",
-                "PLATFORMIO=50101",
-                "ARDUINO_attinyxy4",
-                "MILLIS_USE_TIMERD0",
-                "UARTBAUD5V",
-                ""
-            ],
-            "cStandard": "c11",
-            "cppStandard": "c++11",
-            "compilerPath": "/home/timvosch/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
-            "compilerArgs": [
-                "-mmcu=attiny814",
-                ""
-            ]
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu17",
+      "cppStandard": "gnu++14",
+      "intelliSenseMode": "linux-gcc-x64",
+      "compilerArgs": [],
+      "configurationProvider": "ms-vscode.cmake-tools",
+      "browse": {
+        "path": [
+          "${workspaceFolder}/**"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    }
+  ],
+  "version": 4
 }
