@@ -5,8 +5,10 @@ project(mfmmod)
 include_directories(include)
 
 add_subdirectory(src)
-add_subdirectory(tests)
 
 if(DEFINED AVR)
   add_subdirectory(examples)
-endif(DEFINED AVR)
+endif()
+
+enable_testing()
+add_subdirectory(tests)
