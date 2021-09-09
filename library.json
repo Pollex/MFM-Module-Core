@@ -1,0 +1,14 @@
+{
+  "name": "mfm-module-core",
+  "authors": [
+    {
+      "name": "Senwize",
+      "email": "info@senwize.com"
+    },
+    {
+      "name": "Tim van Osch",
+      "email": "timvanosch@senwize.com"
+    }
+  ],
+  "platforms": "*"
+}
