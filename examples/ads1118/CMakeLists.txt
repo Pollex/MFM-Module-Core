@@ -1,2 +1,2 @@
 add_avr_executable(ads1118 main.c)
-avr_target_link_libraries(ads1118 mfmmod)
+avr_target_link_libraries(ads1118 mod_drivers)

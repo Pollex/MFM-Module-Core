@@ -1,0 +1,10 @@
+[
+  {
+    "name": "AVR-GCC",
+    "toolchainFile": "${workspaceFolder}/avr-gcc.toolchain.cmake",
+    "cmakeSettings": {
+      "AVR_MCU": "attiny814",
+      "AVR_PROGRAMMER": "atmelice_updi"
+    }
+  }
+]

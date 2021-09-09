@@ -1,31 +1,12 @@
 cmake_minimum_required(VERSION 3.11)
 
-######################
-## AVR Compiler
-######################
+project(mfmmod)
 
-set(AVR_MCU attiny814)
-set(AVR_UPLOADTOOL avrdude)
-set(AVR_PROGRAMMER atmelice_updi)
-set(AVR_UPLOADTOOL_PORT usb)
-include(gcc-avr.cmake)
+include_directories(include)
 
-######################
-## Library
-######################
+add_subdirectory(src)
+add_subdirectory(tests)
 
-set(PROJECT_NAME mfmmod)
-project(${PROJECT_NAME})
-
-file(GLOB SRC_FILES "src/**/*.c") # Load all files in src folder
-add_avr_library(${PROJECT_NAME} ${SRC_FILES})
-include_directories(
-  "include/"
-)
-
-
-######################
-## Examples
-######################
-
-add_subdirectory(examples)
+if(DEFINED AVR)
+  add_subdirectory(examples)
+endif(DEFINED AVR)
