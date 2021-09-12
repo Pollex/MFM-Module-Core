@@ -1,7 +1,8 @@
 {
   "files.associations": {
     "spi.h": "c",
-    "circulair_queue.h": "c"
+    "circulair_queue.h": "c",
+    "linked_queue.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }

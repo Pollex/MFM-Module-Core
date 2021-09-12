@@ -3,21 +3,22 @@
 
 #include <stdint.h>
 
-struct os_task
+struct os_task_struct
 {
   void (*func)(void);
   uint8_t priority;
-  struct os_task *next;
+  struct os_task_struct *next;
 };
-typedef struct os_task os_task_t;
+typedef struct os_task_struct os_task;
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  os_task_t *os_popTask(void);
-  void os_pushTask(os_task_t *);
+  os_task *os_popTask(void);
+  void os_pushTask(os_task *);
+  void os_init(void);
 
 #ifdef __cplusplus
 }
