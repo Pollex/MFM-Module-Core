@@ -1,2 +1,2 @@
-add_avr_executable(ads1118 main.c)
-avr_target_link_libraries(ads1118 mod_drivers)
+add_avr_executable(example_ads1118 main.c)
+avr_target_link_libraries(example_ads1118 mod_drivers)
