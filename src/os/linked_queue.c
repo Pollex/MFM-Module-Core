@@ -3,9 +3,14 @@
 
 os_task *head = NULL;
 
-void os_init(void)
+void os_clearTasks(void)
 {
   head = NULL;
+}
+
+os_task *os_peekTask(void)
+{
+  return head;
 }
 
 os_task *os_popTask(void)

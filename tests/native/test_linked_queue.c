@@ -8,13 +8,13 @@ void nop(void) {}
 
 void test_shouldReturnNULLIfQueueEmpty(void)
 {
-  os_init();
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), NULL);
+  os_clearTasks();
+  TEST_ASSERT_EQUAL_PTR(NULL, os_popTask());
 }
 
 void test_shouldFIFOTasksWithSamePriority(void)
 {
-  os_init();
+  os_clearTasks();
   os_task task1 = {
       .func = &nop,
       .priority = 1};
@@ -29,14 +29,14 @@ void test_shouldFIFOTasksWithSamePriority(void)
   os_pushTask(&task2);
   os_pushTask(&task3);
 
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task1);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task2);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task3);
+  TEST_ASSERT_EQUAL_PTR(&task1, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task2, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task3, os_popTask());
 }
 
 void test_shouldPrioritizeTaskWithHigherPriority(void)
 {
-  os_init();
+  os_clearTasks();
   os_task task1 = {
       .func = &nop,
       .priority = 1};
@@ -51,14 +51,14 @@ void test_shouldPrioritizeTaskWithHigherPriority(void)
   os_pushTask(&task2);
   os_pushTask(&task3);
 
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task3);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task1);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task2);
+  TEST_ASSERT_EQUAL_PTR(&task3, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task1, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task2, os_popTask());
 }
 
 void test_shouldPrioritizeTaskInTheMiddle(void)
 {
-  os_init();
+  os_clearTasks();
   os_task task1 = {
       .func = &nop,
       .priority = 1};
@@ -73,9 +73,29 @@ void test_shouldPrioritizeTaskInTheMiddle(void)
   os_pushTask(&task2);
   os_pushTask(&task3);
 
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task3);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task2);
-  TEST_ASSERT_EQUAL_PTR(os_popTask(), &task1);
+  TEST_ASSERT_EQUAL_PTR(&task3, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task2, os_popTask());
+  TEST_ASSERT_EQUAL_PTR(&task1, os_popTask());
+}
+
+void test_peekTaskShouldReturnHeadWithoutPopping(void)
+{
+  os_clearTasks();
+  os_task task1 = {
+      .func = &nop,
+      .priority = 1,
+  };
+
+  os_pushTask(&task1);
+
+  TEST_ASSERT_EQUAL_PTR(&task1, os_peekTask());
+  TEST_ASSERT_EQUAL_PTR(&task1, os_peekTask());
+}
+
+void test_peekTaskShouldReturnNullIfQueueIsEmpty(void)
+{
+  os_clearTasks();
+  TEST_ASSERT_EQUAL_PTR(NULL, os_peekTask());
 }
 
 int main(void)
@@ -85,5 +105,7 @@ int main(void)
   RUN_TEST(test_shouldFIFOTasksWithSamePriority);
   RUN_TEST(test_shouldPrioritizeTaskWithHigherPriority);
   RUN_TEST(test_shouldPrioritizeTaskInTheMiddle);
+  RUN_TEST(test_peekTaskShouldReturnHeadWithoutPopping);
+  RUN_TEST(test_peekTaskShouldReturnNullIfQueueIsEmpty);
   return UNITY_END();
 }

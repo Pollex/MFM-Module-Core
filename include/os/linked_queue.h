@@ -16,9 +16,10 @@ extern "C"
 {
 #endif
 
+  os_task *os_peekTask(void);
   os_task *os_popTask(void);
   void os_pushTask(os_task *);
-  void os_init(void);
+  void os_clearTasks(void);
 
 #ifdef __cplusplus
 }
