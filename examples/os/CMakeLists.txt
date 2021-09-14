@@ -1,0 +1,2 @@
+add_avr_executable(example_os main.c)
+avr_target_link_libraries(example_os mod_os)
