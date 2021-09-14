@@ -9,15 +9,13 @@ extern "C"
 #endif
 
 #ifndef os_presleep
-#warning "User should define void os_presleep(void) method!"
-  void os_presleep(void){};
+  void os_presleep(void);
 #endif
 #ifndef os_postsleep
-#warning "User should define void os_postsleep(void) method!"
-  void os_postsleep(void){};
+  void os_postsleep(void);
 #endif
 
-  void os_clearTasks(void);
+  void os_init(void);
   void os_loop(void);
 #ifdef __cplusplus
 }

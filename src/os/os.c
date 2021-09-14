@@ -11,7 +11,7 @@ os_task task_sleep = {
     .priority = 0,
 };
 
-void os_clearTasks(void)
+void os_init(void)
 {
   os_pushTask(&task_sleep);
 }
@@ -32,7 +32,8 @@ void os_sleep_task(void)
   if (os_peekTask() == NULL)
   {
 #ifdef AVR
-
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_mode();
 #endif
   }
   os_postsleep();
