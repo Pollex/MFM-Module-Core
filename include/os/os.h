@@ -16,7 +16,7 @@ extern "C"
 #endif
 
   void os_init(void);
-  void os_loop(void);
+  void os_processTasks(void);
 #ifdef __cplusplus
 }
 #endif

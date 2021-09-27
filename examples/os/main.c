@@ -48,8 +48,12 @@ int main(void)
   // Usually these tasks are scheduled by an interrupt
   os_pushTask(&example_task);
 
-  // Should never end
-  os_loop();
+  // Processes all pending events
+  // This is usually looped
+  for (;;)
+  {
+    os_processTasks();
+  }
 }
 
 void os_presleep()

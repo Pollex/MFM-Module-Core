@@ -16,7 +16,7 @@ void os_init(void)
   os_pushTask(&task_sleep);
 }
 
-void os_loop(void)
+void os_processTasks(void)
 {
   static os_task *next = NULL;
   while ((next = os_popTask()) != NULL)
