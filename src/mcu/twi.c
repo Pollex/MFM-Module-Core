@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 uint8_t twi_buffer[TWI_BUFFER_LENGTH] = {0};
 volatile uint8_t twi_buffer_rx = 0;
@@ -21,13 +22,15 @@ void twi_end()
 
 void twi_init(uint8_t addr)
 {
-  // Enable interrupts
-  TWI0.SCTRLA = TWI_DIEN_bm | TWI_APIEN_bm | TWI_PIEN_bm;
-  // Set addr
-  TWI0.SADDR = addr << 1;
-  // Enable
-  TWI0.SCTRLA |= TWI_ENABLE_bm;
-  sei();
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
+    // Enable interrupts
+    TWI0.SCTRLA = TWI_DIEN_bm | TWI_APIEN_bm | TWI_PIEN_bm;
+    // Set addr
+    TWI0.SADDR = addr << 1;
+    // Enable
+    TWI0.SCTRLA |= TWI_ENABLE_bm;
+  }
 }
 
 ISR(TWI0_TWIS_vect)
