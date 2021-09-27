@@ -4,6 +4,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/atomic.h>
+#include "os/os.h"
 
 uint8_t twi_buffer[TWI_BUFFER_LENGTH] = {0};
 volatile uint8_t twi_buffer_rx = 0;
@@ -17,6 +18,7 @@ void twi_complete() { TWI0.SCTRLB = 2; } //COMPTRANS
 void twi_end()
 {
   twi_complete();
+  os_unlockSleep();
   twi_busy = 0;
 }
 
@@ -62,6 +64,7 @@ ISR(TWI0_TWIS_vect)
       twi_current_cmd->handler(twi_buffer, twi_buffer_rx);
 
     twi_busy = 1;
+    os_lockSleep();
     twi_buffer_rx = 0;
     twi_buffer_tx = 0;
     twi_current_cmd = 0;

@@ -5,15 +5,20 @@
 #include <avr/sleep.h>
 #endif
 
-void os_sleep_task(void);
-os_task task_sleep = {
-    .func = &os_sleep_task,
-    .priority = 0,
-};
+uint8_t sleepLocks = 0;
 
 void os_init(void)
 {
-  os_pushTask(&task_sleep);
+}
+
+void os_lockSleep(void)
+{
+  sleepLocks++;
+}
+
+void os_unlockSleep(void)
+{
+  sleepLocks--;
 }
 
 void os_processTasks(void)
@@ -25,11 +30,14 @@ void os_processTasks(void)
   }
 }
 
-void os_sleep_task(void)
+void os_sleep(void)
 {
+  if (sleepLocks > 0)
+    return;
+
   os_presleep();
-  // Only actually enter sleep if there is no task queued anymore
-  if (os_peekTask() == NULL)
+  // Only actually enter sleep if there is no task queued anymore and sleep is not locked
+  if (os_peekTask() == NULL && sleepLocks == 0)
   {
 #ifdef AVR
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -37,7 +45,4 @@ void os_sleep_task(void)
 #endif
   }
   os_postsleep();
-
-  // Loop this task infinitely
-  os_pushTask(&task_sleep);
 }

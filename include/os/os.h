@@ -14,9 +14,12 @@ extern "C"
 #ifndef os_postsleep
   void os_postsleep(void);
 #endif
+  void os_sleep(void);
 
   void os_init(void);
   void os_processTasks(void);
+  void os_lockSleep(void);
+  void os_unlockSleep(void);
 #ifdef __cplusplus
 }
 #endif
