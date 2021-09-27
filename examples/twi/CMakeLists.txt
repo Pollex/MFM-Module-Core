@@ -1,0 +1,2 @@
+add_avr_executable(example_twi main.c)
+avr_target_link_libraries(example_twi mod_mcu)
