@@ -1,0 +1,2 @@
+add_avr_executable(example_uart main.c)
+avr_target_link_libraries(example_uart mod_mcu)
