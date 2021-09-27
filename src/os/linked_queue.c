@@ -54,5 +54,6 @@ void os_pushTask(os_task *t)
   }
 
   // Insert task
+  t->next = cursor->next;
   cursor->next = t;
 }
