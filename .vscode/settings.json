@@ -6,7 +6,8 @@
     "sleep.h": "c",
     "uart.h": "c",
     "ads1118.h": "c",
-    "sen0313.h": "c"
+    "sen0313.h": "c",
+    "delay.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }
