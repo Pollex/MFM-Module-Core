@@ -3,7 +3,7 @@
 #include <avr/interrupt.h>
 
 #include "mcu/twi.h"
-#include "drivers/sen0313.h"
+#include "perif/sen0313.h"
 
 #define LED_PORT PORTA
 #define LED_PIN PIN6

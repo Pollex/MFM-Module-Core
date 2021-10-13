@@ -1,4 +1,4 @@
-#include "drivers/sen0313.h"
+#include "perif/sen0313.h"
 #include "mcu/uart.h"
 
 #define TX_PORT(sen) (*(sen->tx_port))

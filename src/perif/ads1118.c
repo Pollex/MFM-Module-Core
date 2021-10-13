@@ -1,4 +1,4 @@
-#include "drivers/ads1118.h"
+#include "perif/ads1118.h"
 
 #include <avr/io.h>
 #include "mcu/spi.h"

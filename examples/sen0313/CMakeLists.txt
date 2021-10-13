@@ -1,2 +1,2 @@
 add_avr_executable(example_sen0313 main.c)
-avr_target_link_libraries(example_sen0313 mod_drivers mod_mcu)
+avr_target_link_libraries(example_sen0313 mod_perif mod_mcu)
