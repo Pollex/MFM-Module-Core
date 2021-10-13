@@ -1,7 +1,7 @@
 #include "drivers/onewire.h"
 
 #include <avr/io.h>
-#include <util/delay.h>
+#include "mcu/util.h"
 
 #define PORT(p) (*(PORT_t *)p)
 
@@ -25,13 +25,13 @@ uint8_t ow_sample(onewire_t *ow)
 
 uint8_t ow_reset(onewire_t *ow)
 {
-  _delay_us(OW_TIME_G);
+  delay_us(OW_TIME_G);
   ow_low(ow);
-  _delay_us(OW_TIME_H);
+  delay_us(OW_TIME_H);
   ow_high(ow);
-  _delay_us(OW_TIME_I);
+  delay_us(OW_TIME_I);
   uint8_t v = ow_sample(ow);
-  _delay_us(OW_TIME_J);
+  delay_us(OW_TIME_J);
   return v;
 }
 
@@ -41,29 +41,29 @@ void ow_write_bit(onewire_t *ow, uint8_t bit)
   if (bit)
   {
     ow_low(ow);
-    _delay_us(OW_TIME_A);
+    delay_us(OW_TIME_A);
     ow_high(ow);
-    _delay_us(OW_TIME_B);
+    delay_us(OW_TIME_B);
     return;
   }
   // Bit is 0
   ow_low(ow);
-  _delay_us(OW_TIME_C);
+  delay_us(OW_TIME_C);
   ow_high(ow);
-  _delay_us(OW_TIME_D);
+  delay_us(OW_TIME_D);
 }
 
 uint8_t ow_read_bit(onewire_t *ow)
 {
   ow_low(ow);
-  _delay_us(OW_TIME_A);
+  delay_us(OW_TIME_A);
   ow_high(ow);
-  _delay_us(OW_TIME_E);
+  delay_us(OW_TIME_E);
   uint8_t val = ow_sample(ow);
-  _delay_us(OW_TIME_F);
+  delay_us(OW_TIME_F);
 }
 
-void ow_write_byte(onewire_t *ow, uint8_t data)
+void ow_write(onewire_t *ow, uint8_t data)
 {
   for (uint8_t i = 0; i < 8; i++)
   {
@@ -71,7 +71,7 @@ void ow_write_byte(onewire_t *ow, uint8_t data)
   }
 }
 
-uint8_t ow_read_byte(onewire_t *ow)
+uint8_t ow_read(onewire_t *ow)
 {
   uint8_t data = 0;
   for (uint8_t i = 0; i < 8; i++)

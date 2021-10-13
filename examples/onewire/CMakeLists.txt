@@ -1,0 +1,2 @@
+add_avr_executable(example_onewire main.c)
+avr_target_link_libraries(example_onewire mod_drivers)

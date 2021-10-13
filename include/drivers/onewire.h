@@ -1,6 +1,7 @@
 #if !defined(_DRIVER_ONEWIRE_H_)
 #define _DRIVER_ONEWIRE_H_
 
+#include <avr/io.h>
 #include <stdint.h>
 
 // Standard OneWire speeds in microseconds
@@ -33,7 +34,7 @@
 
 typedef struct
 {
-  volatile uint8_t *port;
+  PORT_t *port;
   uint8_t pin;
 } onewire_t;
 
@@ -45,9 +46,8 @@ extern "C"
   uint8_t ow_reset(onewire_t *);
   void ow_write_bit(onewire_t *, uint8_t);
   uint8_t ow_read_bit(onewire_t *);
-  void ow_write_byte(onewire_t *, uint8_t);
-  uint8_t ow_read_byte(onewire_t *);
-  void ow_skip(onewire_t *);
+  void ow_write(onewire_t *, uint8_t);
+  uint8_t ow_read(onewire_t *);
 
 #ifdef __cplusplus
 }
