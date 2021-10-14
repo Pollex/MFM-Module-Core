@@ -6,7 +6,9 @@
   TX = PB2
 */
 
+#ifndef F_CPU
 #define F_CPU 2666666L
+#endif
 #define BAUD(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 void uart_init(uart_t *uart)

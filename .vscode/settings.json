@@ -8,7 +8,10 @@
     "ads1118.h": "c",
     "sen0313.h": "c",
     "delay.h": "c",
-    "onewire.h": "c"
+    "onewire.h": "c",
+    "xmega.h": "c",
+    "io.h": "c",
+    "util.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }

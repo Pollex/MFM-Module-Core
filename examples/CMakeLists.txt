@@ -1,4 +1,5 @@
 add_subdirectory(os)
+add_subdirectory(delay)
 add_subdirectory(twi)
 add_subdirectory(uart)
 add_subdirectory(ads1118)

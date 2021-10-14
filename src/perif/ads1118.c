@@ -16,7 +16,9 @@ static const uint16_t fsr_map[] = {
     256,
 };
 
-#define F_CPU 2333333
+#ifndef F_CPU
+#define F_CPU 2666666L
+#endif
 #define RESOLUTION(PGA) ((float)fsr_map[PGA] / (float)32768)
 #define CYCLES_PER_MS (F_CPU / 1000)
 
