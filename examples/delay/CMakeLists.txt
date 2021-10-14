@@ -1,0 +1,2 @@
+add_avr_executable(example_delay main.c)
+avr_target_link_libraries(example_delay mod_mcu)
