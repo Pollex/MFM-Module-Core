@@ -11,7 +11,9 @@
     "onewire.h": "c",
     "xmega.h": "c",
     "io.h": "c",
-    "util.h": "c"
+    "util.h": "c",
+    "interrupt.h": "c",
+    "delay_basic.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }

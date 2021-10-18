@@ -1,82 +1,79 @@
 #include "drivers/onewire.h"
 
 #include <avr/io.h>
-#include "mcu/util.h"
+#include <util/delay.h>
 
-#define PORT(p) (*(PORT_t *)p)
+#define _high_cycles 4
+#define _sample_cycles 4
+#define _low_cycles 7
+#define usToCycles(us) ceil(fabs(((F_CPU / 1000000) * us)))
+extern void __builtin_avr_delay_cycles(unsigned long);
 
-void ow_low(onewire_t *ow)
+void _low()
 {
   // Set out low
-  PORT(ow->port).DIRSET = 1 << ow->pin;
-  PORT(ow->port).OUTCLR = 1 << ow->pin;
+  OW_PORT.DIRSET = 1 << OW_PIN;
+  OW_PORT.OUTCLR = 1 << OW_PIN;
 }
 
-void ow_high(onewire_t *ow)
+void _high()
 {
   // Set input (preferably floating)
-  PORT(ow->port).DIRCLR = 1 << ow->pin;
+  OW_PORT.DIRCLR = 1 << OW_PIN;
 }
 
-uint8_t ow_sample(onewire_t *ow)
+uint8_t _sample()
 {
-  return PORT(ow->port).IN & (1 << ow->pin);
+  return OW_PORT.IN & (1 << OW_PIN);
 }
 
-uint8_t ow_reset(onewire_t *ow)
+uint8_t ow_reset()
 {
-  delay_us(OW_TIME_G);
-  ow_low(ow);
-  delay_us(OW_TIME_H);
-  ow_high(ow);
-  delay_us(OW_TIME_I);
-  uint8_t v = ow_sample(ow);
-  delay_us(OW_TIME_J);
-  return v;
+  uint8_t data;
+  _low();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_H));
+  _high();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_I));
+  data = _sample();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_J));
+  return data;
 }
 
-void ow_write_bit(onewire_t *ow, uint8_t bit)
+void ow_write(uint8_t data)
 {
-  // Bit is 1
-  if (bit)
+  for (uint8_t bit = 0; bit < 8; bit++)
   {
-    ow_low(ow);
-    delay_us(OW_TIME_A);
-    ow_high(ow);
-    delay_us(OW_TIME_B);
-    return;
-  }
-  // Bit is 0
-  ow_low(ow);
-  delay_us(OW_TIME_C);
-  ow_high(ow);
-  delay_us(OW_TIME_D);
-}
-
-uint8_t ow_read_bit(onewire_t *ow)
-{
-  ow_low(ow);
-  delay_us(OW_TIME_A);
-  ow_high(ow);
-  delay_us(OW_TIME_E);
-  uint8_t val = ow_sample(ow);
-  delay_us(OW_TIME_F);
-}
-
-void ow_write(onewire_t *ow, uint8_t data)
-{
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    ow_write_bit(ow, (data >> i) & 0x01);
+    if (data & 0x01)
+    {
+      _low();
+      __builtin_avr_delay_cycles(usToCycles(OW_TIME_A) - _high_cycles);
+      _high();
+      __builtin_avr_delay_cycles(usToCycles(OW_TIME_B));
+    }
+    else
+    {
+      _low();
+      __builtin_avr_delay_cycles(usToCycles(OW_TIME_C) - _high_cycles);
+      _high();
+      __builtin_avr_delay_cycles(usToCycles(OW_TIME_D));
+    }
+    data >>= 1;
   }
 }
 
-uint8_t ow_read(onewire_t *ow)
+uint8_t ow_read(void)
 {
-  uint8_t data = 0;
-  for (uint8_t i = 0; i < 8; i++)
+  uint8_t data;
+  for (uint8_t bit = 0; bit < 8; bit++)
   {
-    data |= ow_read_bit(ow) << i;
+    _low();
+    __builtin_avr_delay_cycles(usToCycles(OW_TIME_A));
+    _high();
+    __builtin_avr_delay_cycles(usToCycles(OW_TIME_E));
+    if (_sample())
+      data |= 1;
+    __builtin_avr_delay_cycles(usToCycles(OW_TIME_F));
+    data <<= 1;
   }
   return data;
 }

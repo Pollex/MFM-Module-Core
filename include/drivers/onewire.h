@@ -4,6 +4,18 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+#ifndef F_CPU
+#define F_CPU 2000000UL
+#endif
+
+#ifndef OW_PORT
+#define OW_PORT PORTA
+#endif
+
+#ifndef OW_PIN
+#define OW_PIN PIN7
+#endif
+
 // Standard OneWire speeds in microseconds
 // Duration of pull down before writing/reading a bit
 #define OW_TIME_A 6
@@ -32,22 +44,14 @@
 #define OW_CMD_SEARCH 0xF0
 #define OW_CMD_MATCH 0x55
 
-typedef struct
-{
-  PORT_t *port;
-  uint8_t pin;
-} onewire_t;
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  uint8_t ow_reset(onewire_t *);
-  void ow_write_bit(onewire_t *, uint8_t);
-  uint8_t ow_read_bit(onewire_t *);
-  void ow_write(onewire_t *, uint8_t);
-  uint8_t ow_read(onewire_t *);
+  uint8_t ow_reset(void);
+  void ow_write(uint8_t);
+  uint8_t ow_read(void);
 
 #ifdef __cplusplus
 }
