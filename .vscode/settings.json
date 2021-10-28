@@ -13,7 +13,8 @@
     "io.h": "c",
     "util.h": "c",
     "interrupt.h": "c",
-    "delay_basic.h": "c"
+    "delay_basic.h": "c",
+    "atomic.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }

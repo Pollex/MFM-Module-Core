@@ -22,14 +22,14 @@ void twi_end()
   twi_busy = 0;
 }
 
-void twi_init(uint8_t addr)
+void twi_init()
 {
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
     // Enable interrupts
     TWI0.SCTRLA = TWI_DIEN_bm | TWI_APIEN_bm | TWI_PIEN_bm;
     // Set addr
-    TWI0.SADDR = addr << 1;
+    TWI0.SADDR = TWI_SLAVE_ADDR << 1 | TWI_ENABLE_GC;
     // Enable
     TWI0.SCTRLA |= TWI_ENABLE_bm;
   }

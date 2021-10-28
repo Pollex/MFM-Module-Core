@@ -3,11 +3,22 @@
 
 #include <stdint.h>
 
+#ifndef TWI_BUFFER_LENGTH
 #define TWI_BUFFER_LENGTH 32
+#endif
 
 #ifndef TWI_CMD_COUNT
 #warning "TWI_CMD_COUNT must be defined manually to use memory efficiently"
 #define TWI_CMD_COUNT 2
+#endif
+
+#ifndef TWI_SLAVE_ADDR
+#warning "Must define SLAVE_ADDR"
+#define TWI_SLAVE_ADDR 0xFF
+#endif
+
+#ifndef TWI_ENABLE_GC
+#define TWI_ENABLE_GC 0
 #endif
 
 typedef struct
@@ -23,7 +34,7 @@ extern "C"
 {
 #endif
 
-  void twi_init(uint8_t addr);
+  void twi_init();
   void twi_ack(void);
   void twi_nack(void);
 
