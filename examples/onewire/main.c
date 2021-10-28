@@ -9,7 +9,7 @@
 
 int main(void)
 {
-  _PROTECTED_WRITE(CLKCTRL_MCLKCTRLB, CLKCTRL_PEN_bm | CLKCTRL_PDIV_8X_gc);
+  // _PROTECTED_WRITE(CLKCTRL_MCLKCTRLB, CLKCTRL_PEN_bm | CLKCTRL_PDIV_8X_gc);
   sei();
   // Set Onewire as input
   OW_PORT.DIRCLR = 1 << OW_PIN;
