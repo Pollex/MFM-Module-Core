@@ -12,24 +12,25 @@ volatile uint8_t twi_buffer_tx = 0;
 volatile uint8_t twi_busy = 0;
 volatile twi_cmd_t *twi_current_cmd;
 
-void twi_ack() { TWI0.SCTRLB = 3; }
-void twi_nack() { TWI0.SCTRLB = 7; }     //RESPONSE, NACK
-void twi_complete() { TWI0.SCTRLB = 2; } //COMPTRANS
+void twi_ack() { TWI0.SCTRLB = TWI_SCMD_RESPONSE_gc; }
+void twi_nack() { TWI0.SCTRLB = TWI_SCMD_RESPONSE_gc | TWI_ACKACT_NACK_gc; } //RESPONSE, NACK
+void twi_complete() { TWI0.SCTRLB = TWI_SCMD_COMPTRANS_gc; }                 //COMPTRANS
 void twi_end()
 {
   twi_complete();
-  os_unlockSleep();
+  os_unlock(os_lock_twi);
   twi_busy = 0;
 }
 
-void twi_init()
+void twi_init(uint8_t addr, uint8_t enable_gc)
 {
+  PORTA.DIRSET = PIN6_bm;
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
     // Enable interrupts
-    TWI0.SCTRLA = TWI_DIEN_bm | TWI_APIEN_bm | TWI_PIEN_bm;
+    TWI0.SCTRLA = TWI_DIEN_bm | TWI_APIEN_bm | TWI_PIEN_bm | TWI_SMEN_bm;
     // Set addr
-    TWI0.SADDR = TWI_SLAVE_ADDR << 1 | TWI_ENABLE_GC;
+    TWI0.SADDR = addr << 1 | enable_gc;
     // Enable
     TWI0.SCTRLA |= TWI_ENABLE_bm;
   }
@@ -59,12 +60,13 @@ ISR(TWI0_TWIS_vect)
 
   if (isAddr)
   {
+    os_lock(os_lock_twi);
+    PORTA.OUTTGL = PIN6_bm;
     // Is restart, call handler
     if (twi_busy && twi_current_cmd)
       twi_current_cmd->handler(twi_buffer, twi_buffer_rx);
 
     twi_busy = 1;
-    os_lockSleep();
     twi_buffer_rx = 0;
     twi_buffer_tx = 0;
     twi_current_cmd = 0;

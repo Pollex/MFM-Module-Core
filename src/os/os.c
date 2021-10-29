@@ -1,48 +1,40 @@
 #include "os/os.h"
-#include <stddef.h>
 
 #ifdef AVR
 #include <avr/sleep.h>
+#include <util/atomic.h>
 #endif
-
-uint8_t sleepLocks = 0;
 
 void os_init(void)
 {
 }
 
-void os_lockSleep(void)
-{
-  sleepLocks++;
-}
-
-void os_unlockSleep(void)
-{
-  sleepLocks--;
-}
-
 void os_processTasks(void)
 {
-  static os_task *next = NULL;
-  while ((next = os_popTask()) != NULL)
+  static os_task *next = 0;
+  while ((next = os_popTask()) != 0)
   {
     next->func();
   }
 }
 
+uint8_t os_isBusy(void)
+{
+  return (os_hasLock() || os_peekTask() != 0);
+}
+
 void os_sleep(void)
 {
-  if (sleepLocks > 0)
-    return;
-
-  os_presleep();
-  // Only actually enter sleep if there is no task queued anymore and sleep is not locked
-  if (os_peekTask() == NULL && sleepLocks == 0)
-  {
 #ifdef AVR
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
+    if (os_isBusy())
+      return;
+
+    os_presleep();
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_mode();
-#endif
+    os_postsleep();
   }
-  os_postsleep();
+#endif
 }

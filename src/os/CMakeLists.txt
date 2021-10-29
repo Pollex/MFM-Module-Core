@@ -1,6 +1,7 @@
 set(MOD_OS_FILES
   circulair_queue.c
   linked_queue.c
+  lock.c
   os.c
 )
 

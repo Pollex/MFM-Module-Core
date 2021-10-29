@@ -12,15 +12,6 @@
 #define TWI_CMD_COUNT 2
 #endif
 
-#ifndef TWI_SLAVE_ADDR
-#warning "Must define SLAVE_ADDR"
-#define TWI_SLAVE_ADDR 0xFF
-#endif
-
-#ifndef TWI_ENABLE_GC
-#define TWI_ENABLE_GC 0
-#endif
-
 typedef struct
 {
   uint8_t cmd;
@@ -34,7 +25,7 @@ extern "C"
 {
 #endif
 
-  void twi_init();
+  void twi_init(uint8_t addr, uint8_t enable_gc);
   void twi_ack(void);
   void twi_nack(void);
 
