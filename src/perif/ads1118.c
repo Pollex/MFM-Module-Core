@@ -1,6 +1,7 @@
 #include "perif/ads1118.h"
 
 #include <avr/io.h>
+#include <util/delay.h>
 #include "mcu/spi.h"
 
 #define CS_PORT(ads) (*(ads->cs_port))
@@ -16,11 +17,7 @@ static const uint16_t fsr_map[] = {
     256,
 };
 
-#ifndef F_CPU
-#define F_CPU 2666666L
-#endif
 #define RESOLUTION(PGA) ((float)fsr_map[PGA] / (float)32768)
-#define CYCLES_PER_MS (F_CPU / 1000)
 
 spi_t ads1118_spi = {
     .data_order = SPI_DORD_MSB,
@@ -37,14 +34,6 @@ void deselect(ads1118_t *ads)
   CS_PORT(ads).OUTSET = 1 << ads->cs_pin;
 }
 
-void delay_5ms(void)
-{
-  for (uint32_t ix = 0; ix < CYCLES_PER_MS * 5; ix++)
-  {
-    __asm("nop");
-  }
-}
-
 /**
  * @brief Transfers the config to the ADS1118 and returns the conversion register
  * 
@@ -54,6 +43,7 @@ void delay_5ms(void)
 uint16_t transfer(ads1118_t *ads)
 {
   select(ads);
+  _delay_us(15);
   uint8_t conv_h = spi_transfer(&ads1118_spi, ads->config.byte.msb);
   uint8_t conv_l = spi_transfer(&ads1118_spi, ads->config.byte.lsb);
   spi_transfer(&ads1118_spi, ads->config.byte.msb);
@@ -70,7 +60,7 @@ void ads1118_setup(ads1118_t *ads)
 
 void ads1118_init(ads1118_t *ads)
 {
-  CS_PORT(ads).DIRSET = 1 << ads->cs_pin;
+  CS_PORT(ads).DIRSET = 1 << (ads->cs_pin);
   deselect(ads);
 
   spi_init(&ads1118_spi);
@@ -88,8 +78,8 @@ float ads1118_read(ads1118_t *ads)
   {
     ads->config.fields.single_shot = 1;
     transfer(ads); // Perform Single Shot measurement
-    ads->config.fields.single_shot = 0;
-    delay_5ms(); // Wait to complete TODO: Should wait for MISO to go low...
+    // ads->config.fields.single_shot = 0;
+    _delay_ms(5); // Wait to complete TODO: Should wait for MISO to go low...
   }
   conversion = transfer(ads); // Read newest conversion results
 
