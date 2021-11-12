@@ -13,7 +13,7 @@ typedef struct
       uint8_t tx_enabled : 1;
     };
   } config;
-  uint16_t baudrate;
+  uint32_t baudrate;
 } uart_t;
 
 #ifdef __cplusplus
