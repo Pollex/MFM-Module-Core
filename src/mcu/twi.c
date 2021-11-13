@@ -24,7 +24,6 @@ void twi_end()
 
 void twi_init(uint8_t addr, uint8_t enable_gc)
 {
-  PORTA.DIRSET = PIN6_bm;
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
     // Enable interrupts
@@ -38,6 +37,7 @@ void twi_init(uint8_t addr, uint8_t enable_gc)
 
 ISR(TWI0_TWIS_vect)
 {
+  os_lock(os_lock_twi);
   uint8_t s = TWI0.SSTATUS;
   uint8_t isErr = s & (TWI_COLL_bm | TWI_BUSERR_bm);
   uint8_t isRead = (s & (TWI_DIF_bm | TWI_DIR_bm)) == 0x82;
@@ -60,8 +60,6 @@ ISR(TWI0_TWIS_vect)
 
   if (isAddr)
   {
-    os_lock(os_lock_twi);
-    PORTA.OUTTGL = PIN6_bm;
     // Is restart, call handler
     if (twi_busy && twi_current_cmd)
       twi_current_cmd->handler(twi_buffer, twi_buffer_rx);
