@@ -13,6 +13,7 @@
 
 void uart_init(uart_t *uart)
 {
+  USART0.CTRLB = 0;
   //
   USART0.BAUD = (uint16_t)BAUD(uart->baudrate);
   USART0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc | USART_CHSIZE_8BIT_gc;
@@ -43,6 +44,8 @@ void uart_putc(uart_t *uart, char data)
   while (!(USART0.STATUS & USART_DREIF_bm))
     ;
   USART0.TXDATAL = data;
+  while (!(USART0.STATUS & USART_TXCIF_bm))
+    ;
 }
 
 char uart_getc(uart_t *uart)
