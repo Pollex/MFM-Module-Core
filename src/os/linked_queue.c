@@ -1,11 +1,10 @@
 #include "os/linked_queue.h"
-#include <stddef.h>
 
-os_task *head = NULL;
+os_task *head = 0;
 
 void os_clearTasks(void)
 {
-  head = NULL;
+  head = 0;
 }
 
 os_task *os_peekTask(void)
@@ -18,8 +17,8 @@ os_task *os_popTask(void)
   os_task *poppedTask = head;
 
   // Queue is empty
-  if (poppedTask == NULL)
-    return NULL;
+  if (poppedTask == 0)
+    return 0;
 
   // Set next task as head
   head = poppedTask->next;
@@ -31,7 +30,7 @@ os_task *os_popTask(void)
 void os_pushTask(os_task *t)
 {
   // Case: Queue is empty
-  if (head == NULL)
+  if (head == 0)
   {
     head = t;
     return;
@@ -46,9 +45,9 @@ void os_pushTask(os_task *t)
   }
 
   // Move forward through linked list until the priority at the cursor
-  // is lower than that of the to be inserted task, or cursor is NULL
+  // is lower than that of the to be inserted task, or cursor is 0
   os_task *cursor = head;
-  while (cursor->next != NULL && cursor->next->priority >= t->priority)
+  while (cursor->next != 0 && cursor->next->priority >= t->priority)
   {
     cursor = cursor->next;
   }
