@@ -9,8 +9,8 @@ extern "C"
 {
 #endif
 
-  void os_presleep(void);
-  void os_postsleep(void);
+  extern void os_presleep(void);
+  extern void os_postsleep(void);
   void os_sleep(void);
 
   void os_init(void);

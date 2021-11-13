@@ -21,9 +21,13 @@ void os_unlock(os_lock_t l)
 
 uint8_t os_hasLock(void)
 {
-  for (int i = 0; i < os_lock_count; i++)
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
-    if (locks[i])
-      return 1;
+    for (int i = 0; i < os_lock_count; i++)
+    {
+      if (locks[i])
+        return 1;
+    }
+    return 0;
   }
 }

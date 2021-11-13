@@ -1,9 +1,7 @@
 #include "os/os.h"
 
-#ifdef AVR
 #include <avr/sleep.h>
 #include <util/atomic.h>
-#endif
 
 void os_init(void)
 {
@@ -25,16 +23,16 @@ uint8_t os_isBusy(void)
 
 void os_sleep(void)
 {
-#ifdef AVR
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  cli();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  if (!os_isBusy())
   {
-    if (os_isBusy())
-      return;
-
     os_presleep();
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    sleep_mode();
+    sleep_enable();
+    sei();
+    sleep_cpu();
+    sleep_disable();
     os_postsleep();
   }
-#endif
+  sei();
 }
