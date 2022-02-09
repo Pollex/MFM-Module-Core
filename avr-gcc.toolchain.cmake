@@ -191,7 +191,7 @@ function(add_avr_executable EXECUTABLE_NAME)
    add_custom_command(
       OUTPUT ${hex_file}
       COMMAND
-         ${AVR_OBJCOPY} -j .text -j .data -O ihex ${elf_file} ${hex_file}
+         ${AVR_OBJCOPY} -j .text -j .data -j .rodata -O ihex ${elf_file} ${hex_file}
       COMMAND
          ${AVR_SIZE_TOOL} ${AVR_SIZE_ARGS} ${elf_file}
       DEPENDS ${elf_file}
