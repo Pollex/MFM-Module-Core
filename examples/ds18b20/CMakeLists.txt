@@ -1,0 +1,2 @@
+add_avr_executable(example_ds18b20 main.c)
+avr_target_link_libraries(example_ds18b20 mod_drivers mod_perif)

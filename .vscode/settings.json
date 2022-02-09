@@ -16,7 +16,8 @@
     "delay_basic.h": "c",
     "atomic.h": "c",
     "locks.h": "c",
-    "os.h": "c"
+    "os.h": "c",
+    "ds18b20.h": "c"
   },
   "python.pythonPath": "/home/timvosch/.local/share/virtualenvs/mfm-module-core-fQVje5Jz/bin/python"
 }
