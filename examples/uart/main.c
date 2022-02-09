@@ -21,6 +21,8 @@ int main(void)
 {
   // Initialize uart
   uart_init(&uart);
+  uart_print(&uart, "Hello, world!\r\n");
+  uart_print(&uart, "This example echoes RX to TX, try typing something: \r\n");
 
   // Infinite loop
   for (;;)

@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.11)
 
 project(mfmmod)
 
-# Default ATTiny814 speed
-add_compile_definitions(-DF_CPU=2666666UL)
 
 if(DEFINED AVR)
+  # Default ATTiny814 speed
+  add_compile_definitions(F_CPU=2666666L)
   get_filename_component(C_COMPILER_DIR ${CMAKE_C_COMPILER} DIRECTORY)
   set(CMAKE_FIND_ROOT_PATH "${C_COMPILER_DIR}/../avr")
   set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
