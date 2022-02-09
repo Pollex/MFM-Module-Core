@@ -51,6 +51,7 @@ extern "C"
 
   uint8_t ow_reset(void);
   void ow_write(uint8_t);
+  uint8_t ow_readBit(void);
   uint8_t ow_read(void);
 
 #ifdef __cplusplus

@@ -24,7 +24,7 @@ void _high()
 
 uint8_t _sample()
 {
-  return OW_PORT.IN & (1 << OW_PIN);
+  return (OW_PORT.IN & (1 << OW_PIN)) > 0;
 }
 
 uint8_t ow_reset()
@@ -61,19 +61,26 @@ void ow_write(uint8_t data)
   }
 }
 
+uint8_t ow_readBit(void)
+{
+  uint8_t data;
+  _low();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_A));
+  _high();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_E));
+  data = _sample();
+  __builtin_avr_delay_cycles(usToCycles(OW_TIME_F));
+  return data;
+}
+
 uint8_t ow_read(void)
 {
   uint8_t data;
   for (uint8_t bit = 0; bit < 8; bit++)
   {
-    _low();
-    __builtin_avr_delay_cycles(usToCycles(OW_TIME_A));
-    _high();
-    __builtin_avr_delay_cycles(usToCycles(OW_TIME_E));
-    if (_sample())
-      data |= 1;
-    __builtin_avr_delay_cycles(usToCycles(OW_TIME_F));
-    data <<= 1;
+    data >>= 1;
+    if (ow_readBit())
+      data |= 0x80;
   }
   return data;
 }
