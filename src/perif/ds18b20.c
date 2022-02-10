@@ -27,7 +27,8 @@ float ds18b20_read(uint8_t id) {
   convert_t(id);
 
   // Wait for conversion to complete
-  while(!ow_readBit())
+  uint32_t start = millis();
+  while(!ow_readBit() && (millis() - start) < 1000);
   {
     delay_ms(20);
   }
