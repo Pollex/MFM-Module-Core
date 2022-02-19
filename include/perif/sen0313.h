@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <avr/io.h>
 
-#define SEN0313_MODE_PROCESSED 0x00
-#define SEN0313_MODE_RAW 0x01
+#define SEN0313_MODE_PROCESSED 0x01
+#define SEN0313_MODE_RAW 0x00
 
 #define SEN0313_MIN_DISTANCE 270 // 270mm = 27cm
 
