@@ -28,18 +28,25 @@ void sen0313_setup(sen0313_t *sen)
 
 uint16_t sen0313_read(sen0313_t *sen)
 {
-  uint8_t buffer[4] = {0};
+  uint8_t buffer[10] = {0};
 
-  // Wait for a start byte
-  do
+  for(int i=0;i<10;i++)
   {
-    buffer[0] = uart_getc(&sen0313_uart);
-  } while (buffer[0] != 0xff);
+    buffer[i]=uart_getc(&sen0313_uart);
+  }
 
-  // Read remaining bytes
-  buffer[1] = uart_getc(&sen0313_uart);
-  buffer[2] = uart_getc(&sen0313_uart);
-  buffer[3] = uart_getc(&sen0313_uart);
+  // Find valid frame
+  for (uint8_t i = 0; i < 5; i++) {
+      // Valid frame found
+    if (buffer[i] == 0xFF && buffer[i + 4] == 0xFF) {
+      // Set first x bytes to frame bytes
+      buffer[0] = buffer[i];
+      buffer[1] = buffer[i + 1];
+      buffer[2] = buffer[i + 2];
+      buffer[3] = buffer[i + 3];
+      break;
+    }
+  }
 
   // Calculate distance
   uint16_t distance = (buffer[1] << 8) | buffer[2];

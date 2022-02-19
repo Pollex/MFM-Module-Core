@@ -105,4 +105,6 @@ ISR(TWI0_TWIS_vect)
     TWI0.SDATA = twi_buffer[twi_buffer_tx++];
     return twi_ack();
   }
+
+  twi_end();
 }
